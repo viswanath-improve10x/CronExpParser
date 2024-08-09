@@ -4,10 +4,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class CronExpressionTest {
 
@@ -28,18 +26,6 @@ class CronExpressionTest {
     @BeforeEach
     void setUp() {
 
-    }
-
-    private List<Integer> createListOfNumbers(int start, int end) {
-        return createListOfNumbers(start, end, 1);
-    }
-
-    private List<Integer> createListOfNumbers(int start, int end, int step) {
-        List<Integer> numbers = new ArrayList<>();
-        for(int i = start; i <= end; i += step) {
-            numbers.add(i);
-        }
-        return numbers;
     }
 
     @Test
@@ -76,11 +62,11 @@ class CronExpressionTest {
     @Test
     void givenAllAsteriskExpression_whenParsed_thenShouldExecuteEveryMinute() throws InvalidCronException {
         CronExpressionData expected = new CronExpressionData(
-                createListOfNumbers(0, 59),
-                createListOfNumbers(0, 23),
-                createListOfNumbers(1, 31),
-                createListOfNumbers(1, 12),
-                createListOfNumbers(0, 6)
+                Numbers.list(0, 59),
+                Numbers.list(0, 23),
+                Numbers.list(1, 31),
+                Numbers.list(1, 12),
+                Numbers.list(0, 6)
         );
         cronExpression = new CronExpression(ALL_STARS_EXPRESSION);
         assertEquals(expected, cronExpression.parse());
@@ -97,11 +83,11 @@ class CronExpressionTest {
     @Test
     void givenValidMinuteExpression_whenParsed_thenShouldIncludeSpecificMinute() throws InvalidCronException {
         CronExpressionData expected = new CronExpressionData(
-                createListOfNumbers(59, 59),
-                createListOfNumbers(0, 23),
-                createListOfNumbers(1, 31),
-                createListOfNumbers(1, 12),
-                createListOfNumbers(0, 6)
+                Numbers.list(59, 59),
+                Numbers.list(0, 23),
+                Numbers.list(1, 31),
+                Numbers.list(1, 12),
+                Numbers.list(0, 6)
         );
         cronExpression = new CronExpression(SPECIFIC_MINUTE_FIELD_EXPRESSION);
         assertEquals(expected, cronExpression.parse());
@@ -118,11 +104,11 @@ class CronExpressionTest {
     @Test
     void givenValidMinuteRangeExpression_whenParsed_thenShouldExecuteWithinRange() throws InvalidCronException {
         CronExpressionData expected = new CronExpressionData(
-                createListOfNumbers(0, 30),
-                createListOfNumbers(0, 23),
-                createListOfNumbers(1, 31),
-                createListOfNumbers(1, 12),
-                createListOfNumbers(0, 6)
+                Numbers.list(0, 30),
+                Numbers.list(0, 23),
+                Numbers.list(1, 31),
+                Numbers.list(1, 12),
+                Numbers.list(0, 6)
         );
         cronExpression = new CronExpression(VALID_RANGE_MINUTE_FIELD_EXPRESSION);
         assertEquals(expected, cronExpression.parse());
@@ -139,11 +125,11 @@ class CronExpressionTest {
     @Test
     void givenValidStepValueMinuteExpression_whenParsed_thenShouldExecuteEveryFiveMinutes() throws InvalidCronException {
         CronExpressionData expected = new CronExpressionData(
-                createListOfNumbers(0, 59, 5),
-                createListOfNumbers(0, 23),
-                createListOfNumbers(1, 31),
-                createListOfNumbers(1, 12),
-                createListOfNumbers(0, 6)
+                Numbers.list(0, 59, 5),
+                Numbers.list(0, 23),
+                Numbers.list(1, 31),
+                Numbers.list(1, 12),
+                Numbers.list(0, 6)
         );
         cronExpression = new CronExpression(VALID_STEP_MINUTE_FIELD_EXPRESSION);
         assertEquals(expected, cronExpression.parse());

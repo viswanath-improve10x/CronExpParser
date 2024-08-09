@@ -1,6 +1,5 @@
 package com.viswanath.cronexpparser;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.viswanath.cronexpparser.InvalidCronException.Type.*;
@@ -18,7 +17,7 @@ public class CronExpression {
         if(expression.isBlank()) throw new InvalidCronException(EMPTY_INPUT);
         String [] cronParams = extractCronParams();
         return new CronExpressionData(
-                extractMinutes(cronParams[0]),
+                new MinutesParser(cronParams[0]).parse(),
                 extractHours(cronParams[1]),
                 extractDaysOfMonth(cronParams[2]),
                 extractMonths(cronParams[3]),
@@ -28,63 +27,51 @@ public class CronExpression {
 
     private List<Integer> extractMinutes(String expression) {
         if(expression.equals("*")) {
-            return createListOfNumbers(0, 59);
+            return Numbers.list(0, 59);
         } else if(expression.contains("-")) {
             String [] range = expression.split("-");
             int start = Integer.parseInt(range[0]);
             int end = Integer.parseInt(range[1]);
-            return createListOfNumbers(start, end);
+            return Numbers.list(start, end);
         } else if(expression.contains("/")) {
             String [] params = expression.split("/");
             int step = Integer.parseInt(params[1]);
-            return createListOfNumbers(0, 59, step);
+            return Numbers.list(0, 59, step);
         } else {
             int minutes = Integer.parseInt(expression);
-            return createListOfNumbers(minutes, minutes);
+            return Numbers.list(minutes, minutes);
         }
     }
 
 
     private List<Integer> extractHours(String expression) {
         if(expression.equals("*")) {
-            return createListOfNumbers(0, 23);
+            return Numbers.list(0, 23);
         }
         return null;
     }
 
     private List<Integer> extractDaysOfMonth(String expression) {
         if(expression.equals("*")) {
-            return createListOfNumbers(1, 31);
+            return Numbers.list(1, 31);
         }
         return null;
     }
 
     private List<Integer> extractMonths(String expression) {
         if(expression.equals("*")) {
-            return createListOfNumbers(1, 12);
+            return Numbers.list(1, 12);
         }
         return null;
     }
 
     private List<Integer> extractDaysOfWeek(String expression) {
         if(expression.equals("*")) {
-            return createListOfNumbers(0, 6);
+            return Numbers.list(0, 6);
         }
         return null;
     }
-
-    private List<Integer> createListOfNumbers(int start, int end) {
-        return createListOfNumbers(start, end, 1);
-    }
-
-    private List<Integer> createListOfNumbers(int start, int end, int step) {
-        List<Integer> numbers = new ArrayList<>();
-        for(int i = start; i <= end; i += step) {
-            numbers.add(i);
-        }
-        return numbers;
-    }
-
+    
     private String[] extractCronParams() throws InvalidCronException {
         String[] params = expression.split("\\s");
         if(params.length != 5) throw new InvalidCronException(INSUFFICIENT_FIELDS);
