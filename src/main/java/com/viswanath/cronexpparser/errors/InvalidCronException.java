@@ -1,4 +1,4 @@
-package com.viswanath.cronexpparser;
+package com.viswanath.cronexpparser.errors;
 
 public class InvalidCronException extends Exception {
 
@@ -6,13 +6,16 @@ public class InvalidCronException extends Exception {
         super(String.format("Invalid Cron Expression: %s", type.message));
     }
 
-    enum Type {
+    public enum Type {
         EMPTY_INPUT("empty input"),
         NULL_INPUT("null input"),
         INSUFFICIENT_FIELDS("insufficient fields"),
         MINUTE_FIELD_OUT_OF_RANGE("minute field out of range"),
         MINUTE_FIELD_INVALID_RANGE("invalid range in minute field"),
-        MINUTE_FIELD_INVALID_STEP("invalid step value in minute field");
+        MINUTE_FIELD_INVALID_STEP("invalid step value in minute field"),
+        HOUR_FIELD_OUT_OF_RANGE("hour field out of range"),
+        HOUR_FIELD_INVALID_RANGE("invalid range in hour field"),
+        HOUR_FIELD_INVALID_STEP("invalid step value in hour field");
 
         private final String message;
 

@@ -1,9 +1,13 @@
-package com.viswanath.cronexpparser;
+package com.viswanath.cronexpparser.utils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Numbers {
+    public static List<Integer> list(int number) {
+        return list(number, number);
+    }
+
     public static List<Integer> list(int start, int end) {
         return list(start, end, 1);
     }
