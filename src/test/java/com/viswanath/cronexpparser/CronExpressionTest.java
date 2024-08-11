@@ -3,8 +3,6 @@ package com.viswanath.cronexpparser;
 import com.viswanath.cronexpparser.errors.InvalidCronException;
 import com.viswanath.cronexpparser.model.CronData;
 import com.viswanath.cronexpparser.utils.Numbers;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -40,12 +38,35 @@ class CronExpressionTest {
     private static final String HOUR_FIELD_VALID_STEP_EXPRESSION = "* */5 * * *";
     private static final String HOUR_FIELD_MULTIPLE_VALUES_EXPRESSION = "* 0,10 * * *";
 
-    private static final String TEST_EXPRESSION = "*/15 0 1,15 * 1-5";
+    // Day of Month Field Expressions
+    private static final String DAY_OF_MONTH_OUT_OF_RANGE_FIELD_EXPRESSION = "* * 32 * *";
+    private static final String DAY_OF_MONTH_FIELD_SPECIFIC_VALUE_EXPRESSION = "* * 15 * *";
+    private static final String DAY_OF_MONTH_FIELD_INVALID_RANGE_EXPRESSION = "* * 15-5 * *";
+    private static final String DAY_OF_MONTH_FIELD_VALID_RANGE_EXPRESSION = "* * 1-31 * *";
+    private static final String DAY_OF_MONTH_FIELD_INVALID_STEP_EXPRESSION = "* * */0 * *";
+    private static final String DAY_OF_MONTH_FIELD_VALID_STEP_EXPRESSION = "* * */5 * *";
+    private static final String DAY_OF_MONTH_FIELD_MULTIPLE_VALUES_EXPRESSION = "* * 1,10 * *";
 
-    @BeforeEach
-    void setUp() {
+    // Month Field Expressions
+    private static final String MONTH_OUT_OF_RANGE_FIELD_EXPRESSION = "* * * 16 *";
+    private static final String MONTH_FIELD_SPECIFIC_VALUE_EXPRESSION = "* * * 8 *";
+    private static final String MONTH_FIELD_INVALID_RANGE_EXPRESSION = "* * * 12-5 *";
+    private static final String MONTH_FIELD_VALID_RANGE_EXPRESSION = "* * * 6-12 *";
+    private static final String MONTH_FIELD_INVALID_STEP_EXPRESSION = "* * * */0 *";
+    private static final String MONTH_FIELD_VALID_STEP_EXPRESSION = "* * * */3 *";
+    private static final String MONTH_FIELD_MULTIPLE_VALUES_EXPRESSION = "* * * 5,10 *";
 
-    }
+    // Day of Week Field Expressions
+    private static final String DAY_OF_WEEK_OUT_OF_RANGE_FIELD_EXPRESSION = "* * * * 7";
+    private static final String DAY_OF_WEEK_FIELD_SPECIFIC_VALUE_EXPRESSION = "* * * * 6";
+    private static final String DAY_OF_WEEK_FIELD_INVALID_RANGE_EXPRESSION = "* * * * 5-1";
+    private static final String DAY_OF_WEEK_FIELD_VALID_RANGE_EXPRESSION = "* * * * 0-6";
+    private static final String DAY_OF_WEEK_FIELD_INVALID_STEP_EXPRESSION = "* * * * */0";
+    private static final String DAY_OF_WEEK_FIELD_VALID_STEP_EXPRESSION = "* * * * */2";
+    private static final String DAY_OF_WEEK_FIELD_MULTIPLE_VALUES_EXPRESSION = "* * * * 1,4";
+
+    // Further Expressions
+    private static final String TEST_EXPRESSION_1 = "*/15 0 1,15 * 1-5";
 
     @Test
     void givenEmptyInput_whenParsed_thenShouldThrowInvalidCronExpression() {
@@ -198,6 +219,187 @@ class CronExpressionTest {
         assertEquals(expected, cronExpression.parse());
     }
 
+    @Test
+    void givenDayOfMonthOutOfRangeExpression_whenParsed_thenShouldThrowInvalidCronExpression() throws InvalidCronException {
+        String expectedErrorMessage = "Invalid Cron Expression: day of month field out of range";
+        cronExpression = new CronExpression(DAY_OF_MONTH_OUT_OF_RANGE_FIELD_EXPRESSION);
+        Exception exception = assertThrows(InvalidCronException.class, () -> {cronExpression.parse();});
+        assertEquals(expectedErrorMessage, exception.getMessage());
+    }
+
+    @Test
+    void givenValidDayOfMonthExpression_whenParsed_thenShouldIncludeSpecificMinute() throws InvalidCronException {
+        CronData expected = allStarsCronData();
+        expected.daysOfMonth = Numbers.list(15);
+        cronExpression = new CronExpression(DAY_OF_MONTH_FIELD_SPECIFIC_VALUE_EXPRESSION);
+        assertEquals(expected, cronExpression.parse());
+    }
+
+    @Test
+    void givenInvalidRangeInDayOfMonthFieldExpression_whenParsed_thenShouldThrowInvalidCronExpression() {
+        String expectedErrorMessage = "Invalid Cron Expression: invalid range in day of month field";
+        cronExpression = new CronExpression(DAY_OF_MONTH_FIELD_INVALID_RANGE_EXPRESSION);
+        Exception exception = assertThrows(InvalidCronException.class, () -> {cronExpression.parse();});
+        assertEquals(expectedErrorMessage, exception.getMessage());
+    }
+
+    @Test
+    void givenValidDayOfMonthRangeExpression_whenParsed_thenShouldExecuteWithinRange() throws InvalidCronException {
+        CronData expected = allStarsCronData();
+        expected.daysOfMonth = Numbers.list(1, 31);
+        cronExpression = new CronExpression(DAY_OF_MONTH_FIELD_VALID_RANGE_EXPRESSION);
+        assertEquals(expected, cronExpression.parse());
+    }
+
+    @Test
+    void givenInvalidStepValueInDayOfMonthFieldExpression_whenParsed_thenShouldThrowInvalidCronExpression() {
+        String expectedErrorMessage = "Invalid Cron Expression: invalid step value in day of month field";
+        cronExpression = new CronExpression(DAY_OF_MONTH_FIELD_INVALID_STEP_EXPRESSION);
+        Exception exception = assertThrows(InvalidCronException.class, () -> {cronExpression.parse();});
+        assertEquals(expectedErrorMessage, exception.getMessage());
+    }
+
+    @Test
+    void givenValidStepValueInDayOfMonthExpression_whenParsed_thenShouldExecuteEveryFiveDays() throws InvalidCronException {
+        CronData expected = allStarsCronData();
+        expected.daysOfMonth = Numbers.list(1, 31, 5);
+        cronExpression = new CronExpression(DAY_OF_MONTH_FIELD_VALID_STEP_EXPRESSION);
+        assertEquals(expected, cronExpression.parse());
+    }
+
+    @Test
+    void givenMultipleHoursInDayOfMonthExpression_whenParsed_thenShouldExecuteAtOneAndTenDays() throws InvalidCronException {
+        CronData expected = allStarsCronData();
+        expected.daysOfMonth = List.of(1, 10);
+        cronExpression = new CronExpression(DAY_OF_MONTH_FIELD_MULTIPLE_VALUES_EXPRESSION);
+        assertEquals(expected, cronExpression.parse());
+    }
+
+    @Test
+    void givenMonthOutOfRangeExpression_whenParsed_thenShouldThrowInvalidCronExpression() throws InvalidCronException {
+        String expectedErrorMessage = "Invalid Cron Expression: month field out of range";
+        cronExpression = new CronExpression(MONTH_OUT_OF_RANGE_FIELD_EXPRESSION);
+        Exception exception = assertThrows(InvalidCronException.class, () -> {cronExpression.parse();});
+        assertEquals(expectedErrorMessage, exception.getMessage());
+    }
+
+    @Test
+    void givenValidMonthExpression_whenParsed_thenShouldIncludeSpecificMonth() throws InvalidCronException {
+        CronData expected = allStarsCronData();
+        expected.months = Numbers.list(8);
+        cronExpression = new CronExpression(MONTH_FIELD_SPECIFIC_VALUE_EXPRESSION);
+        assertEquals(expected, cronExpression.parse());
+    }
+
+    @Test
+    void givenInvalidRangeInMonthFieldExpression_whenParsed_thenShouldThrowInvalidCronExpression() {
+        String expectedErrorMessage = "Invalid Cron Expression: invalid range in month field";
+        cronExpression = new CronExpression(MONTH_FIELD_INVALID_RANGE_EXPRESSION);
+        Exception exception = assertThrows(InvalidCronException.class, () -> {cronExpression.parse();});
+        assertEquals(expectedErrorMessage, exception.getMessage());
+    }
+
+    @Test
+    void givenValidMonthRangeExpression_whenParsed_thenShouldExecuteWithinRange() throws InvalidCronException {
+        CronData expected = allStarsCronData();
+         expected.months = Numbers.list(6, 12);
+        cronExpression = new CronExpression(MONTH_FIELD_VALID_RANGE_EXPRESSION);
+        assertEquals(expected, cronExpression.parse());
+    }
+
+    @Test
+    void givenInvalidStepValueInMonthFieldExpression_whenParsed_thenShouldThrowInvalidCronExpression() {
+        String expectedErrorMessage = "Invalid Cron Expression: invalid step value in month field";
+        cronExpression = new CronExpression(MONTH_FIELD_INVALID_STEP_EXPRESSION);
+        Exception exception = assertThrows(InvalidCronException.class, () -> {cronExpression.parse();});
+        assertEquals(expectedErrorMessage, exception.getMessage());
+    }
+
+    @Test
+    void givenValidStepValueInMonthExpression_whenParsed_thenShouldExecuteEveryFiveMonths() throws InvalidCronException {
+        CronData expected = allStarsCronData();
+        expected.months = Numbers.list(1, 12, 3);
+        cronExpression = new CronExpression(MONTH_FIELD_VALID_STEP_EXPRESSION);
+        assertEquals(expected, cronExpression.parse());
+    }
+
+    @Test
+    void givenMultipleValuesInMonthExpression_whenParsed_thenShouldExecuteAtFiveAndTenMonths() throws InvalidCronException {
+        CronData expected = allStarsCronData();
+        expected.months = List.of(5, 10);
+        cronExpression = new CronExpression(MONTH_FIELD_MULTIPLE_VALUES_EXPRESSION);
+        assertEquals(expected, cronExpression.parse());
+    }
+
+    @Test
+    void givenDayOfWeekOutOfRangeExpression_whenParsed_thenShouldThrowInvalidCronExpression() throws InvalidCronException {
+        String expectedErrorMessage = "Invalid Cron Expression: day of week field out of range";
+        cronExpression = new CronExpression(DAY_OF_WEEK_OUT_OF_RANGE_FIELD_EXPRESSION);
+        Exception exception = assertThrows(InvalidCronException.class, () -> {cronExpression.parse();});
+        assertEquals(expectedErrorMessage, exception.getMessage());
+    }
+
+
+    @Test
+    void givenValidDayOfWeekExpression_whenParsed_thenShouldIncludeSpecificDayOfWeek() throws InvalidCronException {
+        CronData expected = allStarsCronData();
+        expected.daysOfWeek = Numbers.list(6);
+        cronExpression = new CronExpression(DAY_OF_WEEK_FIELD_SPECIFIC_VALUE_EXPRESSION);
+        assertEquals(expected, cronExpression.parse());
+    }
+
+    @Test
+    void givenInvalidRangeInDayOfWeekFieldExpression_whenParsed_thenShouldThrowInvalidCronExpression() {
+        String expectedErrorMessage = "Invalid Cron Expression: invalid range in day of week field";
+        cronExpression = new CronExpression(DAY_OF_WEEK_FIELD_INVALID_RANGE_EXPRESSION);
+        Exception exception = assertThrows(InvalidCronException.class, () -> {cronExpression.parse();});
+        assertEquals(expectedErrorMessage, exception.getMessage());
+    }
+
+    @Test
+    void givenValidDayOfWeekRangeExpression_whenParsed_thenShouldExecuteWithinRange() throws InvalidCronException {
+        CronData expected = allStarsCronData();
+        expected.daysOfWeek = Numbers.list(0, 6);
+        cronExpression = new CronExpression(DAY_OF_WEEK_FIELD_VALID_RANGE_EXPRESSION);
+        assertEquals(expected, cronExpression.parse());
+    }
+
+    @Test
+    void givenInvalidStepValueInDayOfWeekFieldExpression_whenParsed_thenShouldThrowInvalidCronExpression() {
+        String expectedErrorMessage = "Invalid Cron Expression: invalid step value in day of week field";
+        cronExpression = new CronExpression(DAY_OF_WEEK_FIELD_INVALID_STEP_EXPRESSION);
+        Exception exception = assertThrows(InvalidCronException.class, () -> {cronExpression.parse();});
+        assertEquals(expectedErrorMessage, exception.getMessage());
+    }
+
+    @Test
+    void givenValidStepValueInDayOfWeekExpression_whenParsed_thenShouldExecuteEveryTwoDays() throws InvalidCronException {
+        CronData expected = allStarsCronData();
+        expected.daysOfWeek = Numbers.list(0, 6, 2);
+        cronExpression = new CronExpression(DAY_OF_WEEK_FIELD_VALID_STEP_EXPRESSION);
+        assertEquals(expected, cronExpression.parse());
+    }
+
+    @Test
+    void givenMultipleValuesInDayOfWeekExpression_whenParsed_thenShouldExecuteAtFiveAndTenMonths() throws InvalidCronException {
+        CronData expected = allStarsCronData();
+        expected.daysOfWeek = List.of(1, 4);
+        cronExpression = new CronExpression(DAY_OF_WEEK_FIELD_MULTIPLE_VALUES_EXPRESSION);
+        assertEquals(expected, cronExpression.parse());
+    }
+
+    @Test
+    void givenValidExpression_whenParsed_thenShouldExecuteAccordingly() throws InvalidCronException {
+        CronData expected = new CronData(
+            Numbers.list(0, 59, 15),
+            Numbers.list(0),
+            List.of(1, 15),
+            Numbers.list(1, 12),
+            Numbers.list(1, 5)
+        );
+        cronExpression = new CronExpression(TEST_EXPRESSION_1);
+        assertEquals(expected, cronExpression.parse());
+    }
 
     private CronData allStarsCronData() {
         return new CronData(
@@ -207,9 +409,5 @@ class CronExpressionTest {
                 Numbers.list(1, 12),
                 Numbers.list(0, 6)
         );
-    }
-
-    @AfterEach
-    void tearDown() {
     }
 }

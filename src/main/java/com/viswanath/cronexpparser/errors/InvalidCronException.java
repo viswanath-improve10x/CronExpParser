@@ -15,7 +15,16 @@ public class InvalidCronException extends Exception {
         MINUTE_FIELD_INVALID_STEP("invalid step value in minute field"),
         HOUR_FIELD_OUT_OF_RANGE("hour field out of range"),
         HOUR_FIELD_INVALID_RANGE("invalid range in hour field"),
-        HOUR_FIELD_INVALID_STEP("invalid step value in hour field");
+        HOUR_FIELD_INVALID_STEP("invalid step value in hour field"),
+        DAY_OF_MONTH_FIELD_OUT_OF_RANGE("day of month field out of range"),
+        DAY_OF_MONTH_FIELD_INVALID_RANGE("invalid range in day of month field"),
+        DAY_OF_MONTH_FIELD_INVALID_STEP("invalid step value in day of month field"),
+        MONTH_FIELD_OUT_OF_RANGE("month field out of range"),
+        MONTH_FIELD_INVALID_RANGE("invalid range in month field"),
+        MONTH_FIELD_INVALID_STEP("invalid step value in month field"),
+        DAY_OF_WEEK_FIELD_OUT_OF_RANGE("day of week field out of range"),
+        DAY_OF_WEEK_FIELD_INVALID_RANGE("invalid range in day of week field"),
+        DAY_OF_WEEK_FIELD_INVALID_STEP("invalid step value in day of week field");
 
         private final String message;
 

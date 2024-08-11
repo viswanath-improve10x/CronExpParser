@@ -36,4 +36,15 @@ public class CronData {
     public int hashCode() {
         return Objects.hash(minutes, hours, daysOfMonth, months, daysOfWeek);
     }
+
+    @Override
+    public String toString() {
+        return "CronData{" +
+                "minutes=" + minutes +
+                ", hours=" + hours +
+                ", daysOfMonth=" + daysOfMonth +
+                ", months=" + months +
+                ", daysOfWeek=" + daysOfWeek +
+                '}';
+    }
 }

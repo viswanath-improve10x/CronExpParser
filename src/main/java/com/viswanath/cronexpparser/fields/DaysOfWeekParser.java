@@ -1,14 +1,13 @@
 package com.viswanath.cronexpparser.fields;
 
-public class MinutesParser extends FieldParser {
+public class DaysOfWeekParser extends FieldParser {
 
-    public MinutesParser(String fieldExpression) {
+    public DaysOfWeekParser(String fieldExpression) {
         super(fieldExpression);
     }
 
     @Override
     protected FieldType getFieldType() {
-        return FieldType.MINUTES;
+        return FieldType.DAY_OF_WEEK;
     }
 }
-

@@ -4,10 +4,8 @@ import com.viswanath.cronexpparser.errors.InvalidCronException;
 import com.viswanath.cronexpparser.fields.FieldType;
 
 import java.util.Arrays;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.IntStream;
 
 public class CommaSeparatedExpression extends BaseExpression {
 

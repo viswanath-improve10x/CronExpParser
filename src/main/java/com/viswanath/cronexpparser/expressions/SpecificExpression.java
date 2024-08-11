@@ -20,7 +20,10 @@ public class SpecificExpression extends BaseExpression {
     public Map<FieldType, Constraints> getFieldConstrains() {
         return Map.of(
                 FieldType.MINUTES, new Constraints("^(0?[0-9]|[1-5][0-9])$", MINUTE_FIELD_OUT_OF_RANGE),
-                FieldType.HOURS, new Constraints("^(0?[0-9]|1[0-9]|2[0-3])$", HOUR_FIELD_OUT_OF_RANGE)
+                FieldType.HOURS, new Constraints("^(0?[0-9]|1[0-9]|2[0-3])$", HOUR_FIELD_OUT_OF_RANGE),
+                FieldType.DAY_OF_MONTH, new Constraints("^(0?[1-9]|[12][0-9]|3[01])$", DAY_OF_MONTH_FIELD_OUT_OF_RANGE),
+                FieldType.MONTH, new Constraints("^(0?[1-9]|[1][0-2])$", MONTH_FIELD_OUT_OF_RANGE),
+                FieldType.DAY_OF_WEEK, new Constraints("^([0-6])$", DAY_OF_WEEK_FIELD_OUT_OF_RANGE)
         );
     }
 

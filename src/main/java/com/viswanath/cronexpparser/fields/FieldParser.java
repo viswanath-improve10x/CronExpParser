@@ -32,8 +32,13 @@ public abstract class FieldParser {
         }
         return expression;
     }
-    
+
+    public List<Integer> parse() throws InvalidCronException {
+        BaseExpression expression = findMatchingExpression();
+        expression.validate();
+        return expression.extract();
+    }
+
     protected abstract FieldType getFieldType();
 
-    public abstract List<Integer> parse() throws InvalidCronException;
 }

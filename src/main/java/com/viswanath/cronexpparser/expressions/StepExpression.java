@@ -26,7 +26,10 @@ public class StepExpression extends BaseExpression {
     public Map<FieldType, Constraints> getFieldConstrains() {
         return Map.of(
                 FieldType.MINUTES, new Constraints("^\\*/([1-5]?[1-9])$", MINUTE_FIELD_INVALID_STEP),
-                FieldType.HOURS, new Constraints("^\\*/([1-9]|1[0-9]|2[0-3])$", HOUR_FIELD_INVALID_STEP)
+                FieldType.HOURS, new Constraints("^\\*/([1-9]|1[0-9]|2[0-3])$", HOUR_FIELD_INVALID_STEP),
+                FieldType.DAY_OF_MONTH, new Constraints("^\\*/([1-9]|[12][0-9]|3[0-1])$", DAY_OF_MONTH_FIELD_INVALID_STEP),
+                FieldType.MONTH, new Constraints("^\\*/([1-9]|1[0-2])$", MONTH_FIELD_INVALID_STEP),
+                FieldType.DAY_OF_WEEK, new Constraints("^\\*/([1-6])$", DAY_OF_WEEK_FIELD_INVALID_STEP)
         );
     }
 }

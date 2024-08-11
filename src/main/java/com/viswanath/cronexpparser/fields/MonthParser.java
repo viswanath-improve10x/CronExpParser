@@ -1,14 +1,13 @@
 package com.viswanath.cronexpparser.fields;
 
-public class MinutesParser extends FieldParser {
+public class MonthParser extends FieldParser {
 
-    public MinutesParser(String fieldExpression) {
+    public MonthParser(String fieldExpression) {
         super(fieldExpression);
     }
 
     @Override
     protected FieldType getFieldType() {
-        return FieldType.MINUTES;
+        return FieldType.MONTH;
     }
 }
-
