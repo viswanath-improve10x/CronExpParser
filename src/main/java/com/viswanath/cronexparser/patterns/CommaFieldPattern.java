@@ -1,16 +1,16 @@
-package com.viswanath.cronexpparser.expressions;
+package com.viswanath.cronexparser.patterns;
 
-import com.viswanath.cronexpparser.errors.InvalidCronException;
-import com.viswanath.cronexpparser.fields.FieldType;
+import com.viswanath.cronexparser.errors.InvalidCronException;
+import com.viswanath.cronexparser.fields.FieldType;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-public class CommaSeparatedExpression extends BaseExpression {
+public class CommaFieldPattern extends FieldPattern {
 
 
-    public CommaSeparatedExpression(String fieldExpression, FieldType fieldType) {
+    public CommaFieldPattern(String fieldExpression, FieldType fieldType) {
         super(fieldExpression, fieldType);
     }
 
@@ -22,7 +22,7 @@ public class CommaSeparatedExpression extends BaseExpression {
         int end = getFieldType().end;
         for (Integer number: numberList) {
             if(number < start || number > end) {
-                throw new InvalidCronException(getFieldConstrains().get(getFieldType()).errorType);
+                throw new InvalidCronException(getFieldConstrains().get(getFieldType()).errorType());
             }
         }
         return numberList;

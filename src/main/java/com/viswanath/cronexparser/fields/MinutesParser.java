@@ -1,4 +1,4 @@
-package com.viswanath.cronexpparser.fields;
+package com.viswanath.cronexparser.fields;
 
 public class MinutesParser extends FieldParser {
 

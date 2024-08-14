@@ -1,4 +1,4 @@
-package com.viswanath.cronexpparser.utils;
+package com.viswanath.cronexparser.utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,5 +18,11 @@ public class Numbers {
             numbers.add(i);
         }
         return numbers;
+    }
+
+    public static String printable(List<Integer> numbers) {
+        StringBuilder stringBuilder = new StringBuilder();
+        numbers.forEach(number -> stringBuilder.append(String.format(" %d", number)));
+        return stringBuilder.toString().trim();
     }
 }
