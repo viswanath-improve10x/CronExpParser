@@ -1,17 +1,16 @@
-package com.viswanath.cronexpparser.expressions;
+package com.viswanath.cronexparser.patterns;
 
-import com.viswanath.cronexpparser.errors.InvalidCronException;
-import com.viswanath.cronexpparser.fields.FieldType;
+import com.viswanath.cronexparser.errors.InvalidCronException;
+import com.viswanath.cronexparser.fields.FieldType;
 
-import java.awt.*;
 import java.util.List;
 import java.util.Map;
 
-public abstract class BaseExpression {
+public abstract class FieldPattern {
     private final FieldType fieldType;
     private final String fieldExpression;
 
-    public BaseExpression(String fieldExpression, FieldType fieldType) {
+    public FieldPattern(String fieldExpression, FieldType fieldType) {
         this.fieldExpression = fieldExpression;
         this.fieldType = fieldType;
     }
@@ -26,8 +25,8 @@ public abstract class BaseExpression {
 
     public void validate() throws InvalidCronException{
         Constraints constraints = getFieldConstrains().get(getFieldType());
-        if(constraints != null && !fieldExpression.matches(constraints.regex)) {
-            throw new InvalidCronException(constraints.errorType);
+        if(constraints != null && !fieldExpression.matches(constraints.regex())) {
+            throw new InvalidCronException(constraints.fieldType(), constraints.errorType());
         }
     }
 

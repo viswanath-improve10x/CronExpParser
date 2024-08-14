@@ -1,4 +1,4 @@
-package com.viswanath.cronexpparser.fields;
+package com.viswanath.cronexparser.fields;
 
 public enum FieldType {
     MINUTES("minute", 0, 59),

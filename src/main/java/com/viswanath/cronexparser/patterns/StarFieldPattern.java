@@ -1,15 +1,15 @@
-package com.viswanath.cronexpparser.expressions;
+package com.viswanath.cronexparser.patterns;
 
-import com.viswanath.cronexpparser.errors.InvalidCronException;
-import com.viswanath.cronexpparser.fields.FieldType;
-import com.viswanath.cronexpparser.utils.Numbers;
+import com.viswanath.cronexparser.errors.InvalidCronException;
+import com.viswanath.cronexparser.fields.FieldType;
+import com.viswanath.cronexparser.utils.Numbers;
 
 import java.util.List;
 import java.util.Map;
 
-public class AnyValueExpression extends BaseExpression {
+public class StarFieldPattern extends FieldPattern {
 
-    public AnyValueExpression(String fieldExpression, FieldType fieldType) {
+    public StarFieldPattern(String fieldExpression, FieldType fieldType) {
         super(fieldExpression, fieldType);
     }
 

@@ -1,7 +1,7 @@
-package com.viswanath.cronexpparser.fields;
+package com.viswanath.cronexparser.fields;
 
-import com.viswanath.cronexpparser.errors.InvalidCronException;
-import com.viswanath.cronexpparser.expressions.*;
+import com.viswanath.cronexparser.errors.InvalidCronException;
+import com.viswanath.cronexparser.patterns.*;
 
 import java.util.List;
 
@@ -17,24 +17,24 @@ public abstract class FieldParser {
         return fieldExpression;
     }
 
-    protected final BaseExpression findMatchingExpression() {
-        BaseExpression expression;
+    protected final FieldPattern findMatchingExpression() {
+        FieldPattern expression;
         if(getFieldExpression().equals("*")) {
-            expression = new AnyValueExpression(getFieldExpression(), getFieldType());
+            expression = new StarFieldPattern(getFieldExpression(), getFieldType());
         } else if(getFieldExpression().contains("-")) {
-            expression = new RangeExpression(getFieldExpression(), getFieldType());
+            expression = new RangeFieldPattern(getFieldExpression(), getFieldType());
         } else if(getFieldExpression().contains("/")) {
             expression = new StepExpression(getFieldExpression(), getFieldType());
         } else if(getFieldExpression().contains(",")) {
-            expression = new CommaSeparatedExpression(getFieldExpression(), getFieldType());
+            expression = new CommaFieldPattern(getFieldExpression(), getFieldType());
         } else {
-            expression = new SpecificExpression(getFieldExpression(), getFieldType());
+            expression = new ExactFieldPattern(getFieldExpression(), getFieldType());
         }
         return expression;
     }
 
     public List<Integer> parse() throws InvalidCronException {
-        BaseExpression expression = findMatchingExpression();
+        FieldPattern expression = findMatchingExpression();
         expression.validate();
         return expression.extract();
     }
